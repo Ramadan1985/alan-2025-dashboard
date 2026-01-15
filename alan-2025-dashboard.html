@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>لوحة ميزانية شركة الران 2025</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --primary:#0b7285;
+      --primary-soft:#e3fafc;
+      --accent:#12b886;
+      --bg:#f4f5fb;
+      --danger:#e03131;
+      --warning:#f08c00;
+      --purple:#845ef7;
+    }
+    *{box-sizing:border-box;}
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+      background: radial-gradient(circle at top, #edf2ff 0, #f4f5fb 40%, #f8f9fa 100%);
+      margin:0;
+      padding:0;
+      direction:rtl;
+      color:#222;
+      overflow-x:hidden;
+    }
+    .page {
+      max-width:1200px;
+      margin:0 auto;
+      padding:18px 14px 40px;
+    }
+
+    /* رأس الصفحة */
+    .header {
+      display:flex;
+      flex-wrap:wrap;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:18px;
+    }
+    .header-left{min-width:220px;}
+    .title-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-size:12px;
+      padding:3px 9px;
+      border-radius:999px;
+      background:#212529;
+      color:#fff;
+      margin-bottom:6px;
+    }
+    .title-chip span{
+      font-size:10px;
+      opacity:0.8;
+    }
+    h1 {
+      font-size:22px;
+      margin:0;
+      letter-spacing:0.5px;
+    }
+    .subtitle{
+      font-size:13px;
+      color:#555;
+      margin-top:4px;
+    }
+    .header-right{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      align-items:flex-end;
+      font-size:11px;
+      color:#555;
+    }
+    .pill{
+      padding:3px 8px;
+      border-radius:999px;
+      background:#fff;
+      box-shadow:0 2px 6px rgba(15,23,42,0.12);
+    }
+
+    /* الكروت العلوية */
+    .top-cards{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:10px;
+      margin:16px 0 20px;
+    }
+    .top-card{
+      position:relative;
+      background:#fff;
+      border-radius:16px;
+      padding:10px 14px;
+      box-shadow:0 6px 16px rgba(15,23,42,0.12);
+      border-top:4px solid transparent;
+      overflow:hidden;
+    }
+    .top-card.blue{border-color:#228be6;}
+    .top-card.red{border-color:#ff6b6b;}
+    .top-card.green{border-color:#40c057;}
+    .top-card.purple{border-color:#845ef7;}
+    .top-title{
+      font-size:12px;
+      color:#555;
+      margin-bottom:4px;
+    }
+    .top-value{
+      font-size:18px;
+      font-weight:700;
+    }
+    .top-note{
+      font-size:11px;
+      color:#888;
+    }
+    .chip-mini{
+      display:inline-block;
+      font-size:10px;
+      padding:1px 6px;
+      border-radius:999px;
+      background:#edf2ff;
+      color:#364fc7;
+      margin-top:3px;
+    }
+
+    /* Tabs */
+    .tabs{
+      margin-bottom:16px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      border-bottom:1px solid #dee2e6;
+    }
+    .tab-btn{
+      border:none;
+      background:transparent;
+      padding:6px 12px;
+      font-size:12px;
+      border-radius:999px 999px 0 0;
+      cursor:pointer;
+      color:#495057;
+    }
+    .tab-btn.active{
+      background:#fff;
+      color:#0b7285;
+      box-shadow:0 -2px 6px rgba(15,23,42,0.06);
+      border-bottom:2px solid #0b7285;
+    }
+    .tab-content{display:none;}
+    .tab-content.active{display:block;}
+
+    /* شبكة المخططات */
+    .charts-row{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:14px;
+      margin-bottom:18px;
+    }
+    .chart-card{
+      background:#fff;
+      border-radius:18px;
+      padding:10px 12px 16px;
+      box-shadow:0 6px 18px rgba(15,23,42,0.12);
+    }
+    .chart-title{
+      font-size:14px;
+      font-weight:700;
+      margin:4px 0 8px;
+      text-align:center;
+    }
+    canvas{max-width:100%;}
+
+    /* Gauges */
+    .gauge-row{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:12px;
+      margin-bottom:18px;
+    }
+    .gauge-card{
+      background:#fff;
+      border-radius:14px;
+      padding:10px 12px;
+      box-shadow:0 4px 14px rgba(15,23,42,0.1);
+    }
+    .gauge-label{
+      font-size:12px;
+      margin-bottom:4px;
+      color:#444;
+    }
+    .gauge-track{
+      height:10px;
+      border-radius:999px;
+      background:#edf2ff;
+      overflow:hidden;
+    }
+    .gauge-fill{
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg,#4dabf7,#845ef7);
+      width:0;
+      transition:width 1s ease-out;
+    }
+    .gauge-fill.red{
+      background:linear-gradient(90deg,#ff6b6b,#f08c00);
+    }
+    .gauge-value{
+      font-size:11px;
+      color:#666;
+      margin-top:3px;
+    }
+
+    /* جداول */
+    .section-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin:18px 0 6px;
+    }
+    .section-title{
+      font-size:15px;
+      font-weight:700;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .section-title::before{
+      content:"";
+      width:4px;
+      height:16px;
+      border-radius:999px;
+      background:var(--primary);
+    }
+    .section-tag{
+      font-size:11px;
+      padding:2px 8px;
+      border-radius:999px;
+      background:#edf2ff;
+      color:#364fc7;
+    }
+    table {
+      width:100%;
+      border-collapse:collapse;
+      margin-bottom:14px;
+      background:#ffffff;
+      border-radius:12px;
+      overflow:hidden;
+      font-size:12px;
+      box-shadow:0 4px 12px rgba(15,23,42,0.06);
+    }
+    th,td {
+      padding:7px 9px;
+      border-bottom:1px solid #edf2ff;
+      text-align:right;
+      white-space:nowrap;
+    }
+    th {
+      background:linear-gradient(90deg,#edf2ff,#f8f9ff);
+      font-weight:700;
+      color:#364fc7;
+      font-size:12px;
+    }
+    tr:nth-child(even) td{background:#fcfdff;}
+    tr:last-child td{border-bottom:none;}
+    tfoot td{
+      font-weight:700;
+      background:#f1f3f5;
+    }
+
+    .footer {
+      margin-top:24px;
+      font-size:12px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .badge {
+      display:inline-flex;
+      align-items:center;
+      gap:5px;
+      background:#212529;
+      color:#fff;
+      padding:4px 10px;
+      border-radius:999px;
+      font-size:11px;
+    }
+    .badge span{
+      font-size:10px;
+      opacity:0.8;
+    }
+
+    @media (max-width:640px){
+      h1{font-size:18px;}
+      .top-value{font-size:16px;}
+      table{font-size:11px;}
+      .header{flex-direction:column;}
+      .header-right{align-items:flex-start;}
+    }
+  </style>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="page">
+    <!-- رأس -->
+    <header class="header">
+      <div class="header-left">
+        <div class="title-chip">
+          لوحة ميزانية
+          <span>شركة الران – 2025</span>
+        </div>
+        <h1>Dashboard الميزانية لعام 2025</h1>
+        <div class="subtitle">الأصول، الخصوم، رأس المال، الفروع، الإهلاك، وتوزيع الأرباح</div>
+      </div>
+      <div class="header-right">
+        <div class="pill">إعداد: عبدالرحمن رمضان القنيدي</div>
+        <div class="pill">السنة المالية: 2025</div>
+        <div class="pill">مصدر الأرقام: ميزانية شركة الران 2025</div>
+      </div>
+    </header>
+
+    <!-- كروت علوية -->
+    <section class="top-cards">
+      <div class="top-card blue">
+        <div class="top-title">إجمالي الأصول</div>
+        <div class="top-value">35.31 مليون د.ل</div>
+        <div class="top-note">مجموع البضاعة، النقدية، الديون، والأصول الأخرى.</div>
+        <div class="chip-mini">إجمالي الأصل: 35,314,116.393 د.ل.‏</div>
+      </div>
+      <div class="top-card red">
+        <div class="top-title">إجمالي الخصوم</div>
+        <div class="top-value">29.71 مليون د.ل</div>
+        <div class="top-note">دائنون، دائنون موظفين، والتزامات أخرى.</div>
+        <div class="chip-mini">الخصوم: 29,708,611.096 د.ل.‏</div>
+      </div>
+      <div class="top-card green">
+        <div class="top-title">الصافي (حقوق الملكية)</div>
+        <div class="top-value">5.61 مليون د.ل</div>
+        <div class="top-note">الفرق بين الأصول والخصوم.</div>
+        <div class="chip-mini">الصافي: 5,605,505.297 د.ل.‏</div>
+      </div>
+      <div class="top-card purple">
+        <div class="top-title">رأس المال 2024</div>
+        <div class="top-value">17.11 مليون د.ل</div>
+        <div class="top-note">توزيع رأس المال على الشركاء الثلاثة.</div>
+        <div class="chip-mini">إجمالي رأس المال: 17,114,952.000 د.ل.‏</div>
+      </div>
+    </section>
+
+    <!-- Tabs -->
+    <nav class="tabs">
+      <button class="tab-btn active" data-target="tab-summary">ملخص عام</button>
+      <button class="tab-btn" data-target="tab-branches">تفصيل الفروع</button>
+      <button class="tab-btn" data-target="tab-assets-dep">أصول 2025 والإهلاك</button>
+      <button class="tab-btn" data-target="tab-partners">تفصيل الشركاء</button>
+      <button class="tab-btn" data-target="tab-profit">توزيع الأرباح</button>
+    </nav>
+
+    <!-- تبويب: ملخص عام -->
+    <section id="tab-summary" class="tab-content active">
+      <section class="charts-row">
+        <div class="chart-card">
+          <div class="chart-title">هيكل الخصوم</div>
+          <canvas id="liabilitiesChart" height="220"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">هيكل الأصول</div>
+          <canvas id="assetsChart" height="220"></canvas>
+        </div>
+      </section>
+
+      <section class="chart-card" style="margin-bottom:14px;">
+        <div class="chart-title">ملخص (أصول – خصوم – صافي)</div>
+        <canvas id="summaryBarChart" height="180"></canvas>
+      </section>
+
+      <section class="gauge-row">
+        <div class="gauge-card">
+          <div class="gauge-label">نسبة الخصوم من الأصول</div>
+          <div class="gauge-track"><div class="gauge-fill red" id="gauge-liabilities"></div></div>
+          <div class="gauge-value" id="gauge-liabilities-text"></div>
+        </div>
+        <div class="gauge-card">
+          <div class="gauge-label">نسبة الصافي من الأصول</div>
+          <div class="gauge-track"><div class="gauge-fill" id="gauge-equity"></div></div>
+          <div class="gauge-value" id="gauge-equity-text"></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- تبويب: تفصيل الفروع -->
+    <section id="tab-branches" class="tab-content">
+      <section class="charts-row">
+        <div class="chart-card">
+          <div class="chart-title">البضاعة حسب الفرع</div>
+          <canvas id="inventoryBranchesChart" height="220"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">النقدية حسب الفرع</div>
+          <canvas id="cashBranchesChart" height="220"></canvas>
+        </div>
+      </section>
+
+      <div class="section-header">
+        <div class="section-title">البضاعة حسب الفرع (تفصيل)</div>
+        <div class="section-tag">أرصدة المخزون</div>
+      </div>
+      <table>
+        <thead>
+        <tr><th>الفرع</th><th>البضاعة (د.ل.‏)</th></tr>
+        </thead>
+        <tbody>
+        <tr><td>الران</td><td>3,774,621.887</td></tr>
+        <tr><td>عنوان الأسرة</td><td>6,661,705.763</td></tr>
+        <tr><td>فاميليا</td><td>9,508,423.791</td></tr>
+        <tr><td>مخزن طرابلس</td><td>565,861.574</td></tr>
+        </tbody>
+        <tfoot>
+        <tr><td>الإجمالي</td><td>20,510,613.015</td></tr>
+        </tfoot>
+      </table>
+
+      <div class="section-header">
+        <div class="section-title">النقدي والدائنون (عملاء) حسب الفرع</div>
+        <div class="section-tag">سيولة والتزامات</div>
+      </div>
+      <table>
+        <thead>
+        <tr><th>الفرع</th><th>نقدي (د.ل.‏)</th><th>دائنون عملاء (د.ل.‏)</th></tr>
+        </thead>
+        <tbody>
+        <tr><td>الران</td><td>9,303,137.000</td><td>4,240,994.639</td></tr>
+        <tr><td>عنوان الأسرة</td><td>126,385.000</td><td>3,786,075.841</td></tr>
+        <tr><td>فاميليا</td><td>104,814.000</td><td>4,393,442.788</td></tr>
+        <tr><td>مخزن طرابلس</td><td>3,848.000</td><td>0.000</td></tr>
+        </tbody>
+        <tfoot>
+        <tr><td>الإجمالي</td><td>9,538,184.000</td><td>12,420,513.268</td></tr>
+        </tfoot>
+      </table>
+    </section>
+
+    <!-- تبويب: أصول 2025 والإهلاك -->
+    <section id="tab-assets-dep" class="tab-content">
+      <div class="section-header">
+        <div class="section-title">أصول 2025 قبل وبعد الإهلاك</div>
+        <div class="section-tag">إهلاك على 5 سنوات (20% سنويًا)</div>
+      </div>
+
+      <table>
+        <thead>
+        <tr>
+          <th>الفرع</th>
+          <th>أصول 2024</th>
+          <th>أصول 2025 فقط</th>
+          <th>إجمالي الأصول 2025 قبل الإهلاك</th>
+          <th>مصروف الإهلاك السنوي (20%)</th>
+          <th>صافي الأصول بعد الإهلاك</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>الران</td>
+          <td>71,102.720</td>
+          <td>81,594.000</td>
+          <td>152,696.720</td>
+          <td>30,539.344</td>
+          <td>122,157.376</td>
+        </tr>
+        <tr>
+          <td>عنوان الأسرة</td>
+          <td>193,752.960</td>
+          <td>110,912.000</td>
+          <td>304,664.960</td>
+          <td>60,933.0</td>
+          <td>243,731.968</td>
+        </tr>
+        <tr>
+          <td>فاميليا</td>
+          <td>479,637.600</td>
+          <td>554,717.000</td>
+          <td>1,034,354.600</td>
+          <td>206,870.92</td>
+          <td>827,483.680</td>
+        </tr>
+        <tr>
+          <td>مخزن طرابلس</td>
+          <td>0.000</td>
+          <td>173,989.000</td>
+          <td>173,989.000</td>
+          <td>34,797.800</td>
+          <td>139,191.200</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+          <td>الإجمالي</td>
+          <td>744,493.280</td>
+          <td>921,212.000</td>
+          <td>1,665,705.280</td>
+          <td>≈ 333,139.0</td>
+          <td>1,332,564.224</td>
+        </tr>
+        </tfoot>
+      </table>
+
+      <section class="chart-card" style="margin-top:10px;">
+        <div class="chart-title">صافي الأصول بعد الإهلاك حسب الفرع – 2025</div>
+        <canvas id="netAssetsAfterDepChart" height="220"></canvas>
+      </section>
+    </section>
+
+    <!-- تبويب: تفصيل الشركاء -->
+    <section id="tab-partners" class="tab-content">
+      <section class="charts-row">
+        <div class="chart-card">
+          <div class="chart-title">توزيع رأس المال بين الشركاء (2024)</div>
+          <canvas id="partnersChart" height="220"></canvas>
+        </div>
+      </section>
+
+      <div class="section-header">
+        <div class="section-title">رأس المال حسب الشريك – 2024</div>
+        <div class="section-tag">هيكل الملكية</div>
+      </div>
+      <table>
+        <thead>
+        <tr><th>الشريك</th><th>رأس المال (د.ل.‏)</th></tr>
+        </thead>
+        <tbody>
+        <tr><td>الشريك الثالث</td><td>9,208,209.000</td></tr>
+        <tr><td>الشريك الأول</td><td>6,043,364.000</td></tr>
+        <tr><td>الشريك الثاني</td><td>1,863,379.000</td></tr>
+        </tbody>
+        <tfoot>
+        <tr><td>الإجمالي</td><td>17,114,952.000</td></tr>
+        </tfoot>
+      </table>
+    </section>
+
+    <!-- تبويب: توزيع الأرباح -->
+    <section id="tab-profit" class="tab-content">
+      <div class="section-header">
+        <div class="section-title">توزيع أرباح سنة 2025 على الشركاء</div>
+        <div class="section-tag">صافي الربح 2025: 5,605,505.30 د.ل.‏</div>
+      </div>
+
+      <section class="charts-row">
+        <!-- المربع الأول: نسبة كل شريك + نص صافي المربح -->
+        <div class="chart-card">
+          <div class="chart-title">نسبة كل شريك من صافي ربح 2025</div>
+          <canvas id="profitDistChart" height="220"></canvas>
+
+          <!-- نص صافي مربح كل شريك حسب طلبك -->
+          <div style="margin-top:8px; font-size:12px; line-height:1.6; text-align:right;">
+            <strong>صافي مربح الشريك الأول:</strong> 3,641,622.734 د.ل.‏<br>
+            <strong>صافي مربح الشريك الثاني:</strong> 305,147.828 د.ل.‏<br>
+            <strong>صافي مربح الشريك الثالث:</strong> 1,658,734.736 د.ل.‏
+          </div>
+        </div>
+
+        <!-- المربع الثاني: رأس المال الجديد قبل الزكاة -->
+        <div class="chart-card">
+          <div class="chart-title">رأس المال الجديد قبل الزكاة</div>
+          <canvas id="newCapitalChart" height="220"></canvas>
+        </div>
+      </section>
+
+      <!-- جدول التوزيع الأساسي -->
+      <table>
+        <thead>
+        <tr>
+          <th>الشريك</th>
+          <th>صافي ربح الشريك (د.ل.‏)</th>
+          <th>مسحوبات الشريك (د.ل.‏)</th>
+          <th>نسبة الشريك من الربح</th>
+          <th>رأس مال 2024 (د.ل.‏)</th>
+          <th>رأس المال بعد الربح والمسحوبات (قبل الزكاة)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>الشريك الأول</td>
+          <td>1,979,328.304</td>
+          <td>1,416,164.000</td>
+          <td>0.35310435</td>
+          <td>6,043,364.00</td>
+          <td>8,268,822.73</td>
+        </tr>
+        <tr>
+          <td>الشريك الثاني</td>
+          <td>610,295.656</td>
+          <td>40,500.000</td>
+          <td>0.108874334</td>
+          <td>1,863,379.00</td>
+          <td>2,128,026.83</td>
+        </tr>
+        <tr>
+          <td>الشريك الثالث</td>
+          <td>3,015,881.337</td>
+          <td>0.000</td>
+          <td>0.538021316</td>
+          <td>9,208,209.00</td>
+          <td>10,866,943.74</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+          <td>الإجمالي</td>
+          <td>5,605,505.297</td>
+          <td>1,456,664.000</td>
+          <td>≈ 1.000000000</td>
+          <td>17,114,952.00</td>
+          <td>21,263,793.30</td>
+        </tr>
+        </tfoot>
+      </table>
+
+           <!-- جدول يوضح زيادة رأس المال لكل شريك قبل وبعد أرباح 2025 -->
+      <div class="section-header" style="margin-top:10px;">
+        <div class="section-title">زيادة رأس المال لكل شريك قبل وبعد أرباح 2025</div>
+        <div class="section-tag">مقارنة رأس المال 2024 برأس المال قبل الزكاة 2025</div>
+      </div>
+
+      <table>
+        <thead>
+        <tr>
+          <th>الشريك</th>
+          <th>رأس المال 2024 (قبل الأرباح)</th>
+          <th>رأس المال بعد أرباح 2025 والمسحوبات (قبل الزكاة)</th>
+          <th>قيمة الزيادة في رأس المال</th>
+          <th>نسبة الزيادة في رأس المال (%)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>الشريك الأول</td>
+          <td>6,043,364.00</td>
+          <td>8,268,822.73</td>
+          <td>2,225,458.73</td>
+          <td>≈ 36.82%</td>
+        </tr>
+        <tr>
+          <td>الشريك الثاني</td>
+          <td>1,863,379.00</td>
+          <td>2,128,026.83</td>
+          <td>264,647.83</td>
+          <td>≈ 14.21%</td>
+        </tr>
+        <tr>
+          <td>الشريك الثالث</td>
+          <td>9,208,209.00</td>
+          <td>10,866,943.74</td>
+          <td>1,658,734.74 تقريبًا</td>
+          <td>≈ 18.02%</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+          <td>الإجمالي</td>
+          <td>17,114,952.00</td>
+          <td>21,263,793.30</td>
+          <td>4,148,841.30</td>
+          <td>≈ 24.24%</td>
+        </tr>
+        </tfoot>
+      </table>
+
+      <!-- توضيح: ما يأخذه الشريك الأول من أرباح الشريك الثاني والثالث -->
+      <div class="section-header" style="margin-top:10px;">
+        <div class="section-title">توضيح حصص إضافية لصالح الشريك الأول</div>
+        <div class="section-tag">اتفاق توزيع داخلي بين الشركاء</div>
+      </div>
+
+      <table>
+        <thead>
+        <tr>
+          <th>مصدر الربح</th>
+          <th>قيمة الربح المحوَّل للشريك الأول (د.ل.‏)</th>
+          <th>نسبة الحصة</th>
+          <th>ملاحظة</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>من ربح الشريك الثالث</td>
+          <td>1,357,146.60</td>
+          <td>0.45</td>
+          <td>الشريك الأول يحصل على 45% من ربح الشريك الثالث</td>
+        </tr>
+        <tr>
+          <td>من ربح الشريك الثاني</td>
+          <td>305,147.83</td>
+          <td>0.50</td>
+          <td>الشريك الأول يحصل على 50% من ربح الشريك الثاني</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div style="background:#fff; border-radius:10px; padding:8px 10px; font-size:11px; box-shadow:0 2px 8px rgba(15,23,42,0.08);">
+        الشريك الأول لا يقتصر نصيبه على حصته المباشرة من صافي الربح فقط، بل يحصل أيضًا على
+        <strong>1,357,146.60 د.ل.‏ (45%) من ربح الشريك الثالث</strong>
+        و
+        <strong>305,147.83 د.ل.‏ (50%) من ربح الشريك الثاني</strong>
+        حسب اتفاق توزيع الأرباح بين الشركاء.
+      </div>
+
+      <div style="font-size:11px; color:#666; margin-top:6px;">
+        المعد: عبدالرحمن رمضان القنيدي – التوقيع: --------
+      </div>
+    </section>
+
+    <!-- تذييل -->
+    <footer class="footer">
+      <div class="badge">
+        <span>معد الميزانية</span>
+        عبدالرحمن رمضان القنيدي
+      </div>
+      <div class="badge">
+        <span>لوحة العرض</span>
+        إصدار داخلي – 2025
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // أرقام أساسية
+    const totalAssets = 35314116.393;
+    const totalLiabilities = 29708611.096;
+    const netEquity = 5605505.297;
+    const totalCapital = 17114952.0;
+
+    // خصوم
+    const suppliers = 12420513.268;
+    const staffCreditors = 173145.828;
+    const otherLiabilities = totalLiabilities - (suppliers + staffCreditors);
+
+    // أصول
+    const inventory = 20510613.015;
+    const cash = 9538184.0;
+    const receivables = 3705206.154;
+    const otherAssets = totalAssets - (inventory + cash + receivables);
+
+    // فروع
+    const branches = ['الران','عنوان الأسرة','فاميليا','مخزن طرابلس'];
+    const inventoryByBranch = [3774621.887, 6661705.763, 9508423.791, 565861.574];
+    const cashByBranch = [9303137.0, 126385.0, 104814.0, 3848.0];
+
+    // شركاء رأس المال
+    const partnerLabels = ['الشريك الثالث','الشريك الأول','الشريك الثاني'];
+    const partnerCapital = [9208209.0, 6043364.0, 1863379.0];
+
+    // صافي الأصول بعد الإهلاك
+    const netAssetsByBranch = [122157.376, 243731.968, 827483.680, 139191.200];
+
+    // أرباح الشركاء (للمخطط – قيم تقريبية من التوزيع الأساسي)
+    const profitLabels = ['الشريك الأول','الشريك الثاني','الشريك الثالث'];
+    const profitShares = [1979328.304, 610295.656, 3015881.337];
+    const newCapitalByPartner = [8268822.73, 2128026.83, 10866943.74];
+
+    // مخطط الخصوم
+    const liabilitiesCtx = document.getElementById('liabilitiesChart');
+    if (liabilitiesCtx){
+      new Chart(liabilitiesCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['الدائنون (موردين)', 'دائنون موظفين', 'بنود أخرى'],
+          datasets: [{
+            data: [suppliers, staffCreditors, otherLiabilities],
+            backgroundColor: ['#ff6b6b', '#ffa94d', '#748ffc'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip:{callbacks:{label:(ctx)=>ctx.label+' : '+ctx.formattedValue+' د.ل'}}
+          },
+          cutout: '65%',
+        }
+      });
+    }
+
+    // مخطط الأصول
+    const assetsCtx = document.getElementById('assetsChart');
+    if (assetsCtx){
+      new Chart(assetsCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['البضاعة', 'النقدية', 'ديون العملاء', 'أصول أخرى'],
+          datasets: [{
+            data: [inventory, cash, receivables, otherAssets],
+            backgroundColor: ['#4dabf7', '#51cf66', '#fab005', '#845ef7'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip:{callbacks:{label:(ctx)=>ctx.label+' : '+ctx.formattedValue+' د.ل'}}
+          },
+          cutout: '65%',
+        }
+      });
+    }
+
+    // ملخص شريطي
+    const summaryCtx = document.getElementById('summaryBarChart');
+    if (summaryCtx){
+      new Chart(summaryCtx, {
+        type: 'bar',
+        data: {
+          labels: ['الأصول', 'الخصوم', 'الصافي'],
+          datasets: [{
+            label: 'قيمة (مليون د.ل)',
+            data: [
+              (totalAssets/1_000_000).toFixed(2),
+              (totalLiabilities/1_000_000).toFixed(2),
+              (netEquity/1_000_000).toFixed(2)
+            ],
+            backgroundColor: ['#4dabf7', '#ff6b6b', '#51cf66'],
+            borderRadius: 8,
+            barPercentage: 0.6
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          plugins: {
+            legend: { display:false },
+            tooltip:{callbacks:{label:(ctx)=>ctx.formattedValue+' مليون د.ل'}}
+          },
+          scales: {
+            x: {grid:{color:'#e9ecef'}, ticks:{callback:(v)=>v+'M'}},
+            y: {grid:{display:false}}
+          }
+        }
+      });
+    }
+
+    // Gauges
+    const liabRatio = (totalLiabilities/totalAssets)*100;
+    const eqRatio = (netEquity/totalAssets)*100;
+    document.getElementById('gauge-liabilities').style.width = liabRatio.toFixed(1)+'%';
+    document.getElementById('gauge-equity').style.width = eqRatio.toFixed(1)+'%';
+    document.getElementById('gauge-liabilities-text').textContent =
+      'الخصوم ≈ ' + liabRatio.toFixed(1) + '% من الأصول';
+    document.getElementById('gauge-equity-text').textContent =
+      'الصافي ≈ ' + eqRatio.toFixed(1) + '% من الأصول';
+
+    // بضاعة الفروع
+    const invBranchCtx = document.getElementById('inventoryBranchesChart');
+    if (invBranchCtx){
+      new Chart(invBranchCtx, {
+        type: 'bar',
+        data: {
+          labels: branches,
+          datasets: [{
+            label: 'بضاعة (د.ل.‏)',
+            data: inventoryByBranch,
+            backgroundColor: '#4dabf7',
+            borderRadius:8
+          }]
+        },
+        options:{plugins:{legend:{display:false}}, scales:{y:{grid:{color:'#e9ecef'}}}}
+      });
+    }
+
+    // نقدي الفروع
+    const cashBranchCtx = document.getElementById('cashBranchesChart');
+    if (cashBranchCtx){
+      new Chart(cashBranchCtx, {
+        type: 'bar',
+        data: {
+          labels: branches,
+          datasets: [{
+            label: 'نقدي (د.ل.‏)',
+            data: cashByBranch,
+            backgroundColor: '#51cf66',
+            borderRadius:8
+          }]
+        },
+        options:{plugins:{legend:{display:false}}, scales:{y:{grid:{color:'#e9ecef'}}}}
+      });
+    }
+
+    // صافي الأصول بعد الإهلاك
+    const netAssetsCtx = document.getElementById('netAssetsAfterDepChart');
+    if (netAssetsCtx){
+      new Chart(netAssetsCtx, {
+        type: 'bar',
+        data: {
+          labels: branches,
+          datasets: [{
+            label: 'صافي الأصول بعد الإهلاك (د.ل.‏)',
+            data: netAssetsByBranch,
+            backgroundColor: '#845ef7',
+            borderRadius:8
+          }]
+        },
+        options:{plugins:{legend:{display:false}}, scales:{y:{grid:{color:'#e9ecef'}}}}
+      });
+    }
+
+    // رأس مال الشركاء
+    const partnersCtx = document.getElementById('partnersChart');
+    if (partnersCtx){
+      new Chart(partnersCtx, {
+        type: 'pie',
+        data: {
+          labels: partnerLabels,
+          datasets: [{
+            data: partnerCapital,
+            backgroundColor: ['#4dabf7','#845ef7','#ff922b'],
+            borderWidth:0
+          }]
+        },
+        options:{plugins:{legend:{position:'bottom'}}}
+      });
+    }
+
+    // توزيع الأرباح
+    const profitCtx = document.getElementById('profitDistChart');
+    if (profitCtx){
+      new Chart(profitCtx, {
+        type: 'doughnut',
+        data: {
+          labels: profitLabels,
+          datasets: [{
+            data: profitShares,
+            backgroundColor: ['#4dabf7','#ff922b','#51cf66'],
+            borderWidth:0
+          }]
+        },
+        options:{
+          plugins:{
+            legend:{position:'bottom'},
+            tooltip:{callbacks:{label:(c)=>c.label+' : '+c.formattedValue+' د.ل'}}
+          },
+          cutout:'60%'
+        }
+      });
+    }
+
+    const newCapCtx = document.getElementById('newCapitalChart');
+    if (newCapCtx){
+      new Chart(newCapCtx, {
+        type:'bar',
+        data:{
+          labels: profitLabels,
+          datasets:[{
+            label:'رأس المال قبل الزكاة (د.ل.‏)',
+            data:newCapitalByPartner,
+            backgroundColor:'#4263eb',
+            borderRadius:8
+          }]
+        },
+        options:{plugins:{legend:{display:false}}, scales:{y:{grid:{color:'#e9ecef'}}}}
+      });
+    }
+
+    // تبويبات
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabButtons.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const target = btn.dataset.target;
+        tabButtons.forEach(b=>b.classList.remove('active'));
+        tabContents.forEach(c=>c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(target).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
